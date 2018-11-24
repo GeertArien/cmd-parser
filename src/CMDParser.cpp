@@ -3,14 +3,21 @@
 
 namespace RegexFA {
 
-bool CMDParser::Parse(int argc, const char** argv, std::vector<CMDArgument*> arguments) {
+CMDParser::CMDParser(const std::string& example) : example_(example)
+{ }
+
+void CMDParser::SetArguments(const std::vector<CMDArgument*> arguments) {
+	arguments_ = arguments;
+}
+
+bool CMDParser::Parse(int argc, const char** argv) {
 	errors_.clear();
 
 	for (size_t i = 1; i < argc; ++i) {
 		const std::string current_identifier = argv[i];
 		bool found_argument = false;
 
-		for (auto& argument : arguments) {
+		for (auto& argument : arguments_) {
 			if (argument->GetIdentifier() == current_identifier) {
 				found_argument = true;
 
@@ -35,7 +42,7 @@ bool CMDParser::Parse(int argc, const char** argv, std::vector<CMDArgument*> arg
 		}
 	}
 
-	ValidateArguments(arguments);
+	ValidateArguments(arguments_);
 	return errors_.empty();
 }
 
@@ -45,6 +52,28 @@ void CMDParser::ValidateArguments(std::vector<CMDArgument*>& arguments) {
 			errors_.push_back("'" + argument->GetIdentifier() + "' is a required argument");
 		}
 	}
+}
+
+void CMDParser::PrintErrors(std::ostream& os) const {
+	os << "Errors:" << std::endl;
+
+	for (const auto& error : errors_) {
+		os << "- " << error << std::endl;
+	}
+}
+
+void CMDParser::PrintHelp(std::ostream& os) const {
+	os << "Arguments:\n";
+
+	for (const auto& argument : arguments_) {
+		os << std::left << std::setw(13) << argument->GetIdentifier() << std::setw(45) << argument->GetDescription();
+		if (argument->IsRequired()) {
+			os << "required";
+		}
+		os << '\n';
+	}
+
+	os << '\n' << "Example:" << '\n' << example_ << std::endl;
 }
 
 }
