@@ -1,4 +1,4 @@
-#include "CMDParser.h"
+#include "../include/CMDParser.h"
 
 
 namespace RegexFA {
