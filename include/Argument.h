@@ -3,9 +3,9 @@
 #include <string>
 
 
-namespace RegexFA {
+namespace CMD {
 
-	class CMDArgument final {
+	class Argument final {
 
 	public:
 		enum class Type {
@@ -13,8 +13,8 @@ namespace RegexFA {
 			String
 		};
 
-		explicit CMDArgument(Type type, const std::string& identifier, const std::string& description, bool value);
-		explicit CMDArgument(Type type, const std::string& identifier, const std::string& description,
+		explicit Argument(Type type, const std::string& identifier, const std::string& description, bool value);
+		explicit Argument(Type type, const std::string& identifier, const std::string& description,
 				const std::string& value, bool required);
 
 		void SetBoolValue(bool value);

@@ -1,16 +1,16 @@
-#include "../include/CMDParser.h"
+#include "../include/Parser.h"
 
 
-namespace RegexFA {
+namespace CMD {
 
-CMDParser::CMDParser(const std::string& example) : example_(example)
+Parser::Parser(const std::string& example) : example_(example)
 { }
 
-void CMDParser::SetArguments(const std::vector<CMDArgument*> arguments) {
+void Parser::SetArguments(const std::vector<Argument*> arguments) {
 	arguments_ = arguments;
 }
 
-bool CMDParser::Parse(int argc, const char** argv) {
+bool Parser::Parse(int argc, const char** argv) {
 	errors_.clear();
 
 	for (size_t i = 1; i < argc; ++i) {
@@ -21,7 +21,7 @@ bool CMDParser::Parse(int argc, const char** argv) {
 			if (argument->GetIdentifier() == current_identifier) {
 				found_argument = true;
 
-				if (argument->GetType() == CMDArgument::Type::String) {
+				if (argument->GetType() == Argument::Type::String) {
 					if (++i < argc) {
 						argument->SetStringValue(argv[i]);
 						break;
@@ -46,7 +46,7 @@ bool CMDParser::Parse(int argc, const char** argv) {
 	return errors_.empty();
 }
 
-void CMDParser::ValidateArguments(std::vector<CMDArgument*>& arguments) {
+void Parser::ValidateArguments(std::vector<Argument*>& arguments) {
 	for (const auto& argument : arguments) {
 		if (argument->IsRequired() && argument->GetStringValue().empty()) {
 			errors_.push_back("'" + argument->GetIdentifier() + "' is a required argument");
@@ -54,7 +54,7 @@ void CMDParser::ValidateArguments(std::vector<CMDArgument*>& arguments) {
 	}
 }
 
-void CMDParser::PrintErrors(std::ostream& os) const {
+void Parser::PrintErrors(std::ostream& os) const {
 	os << "Errors:" << std::endl;
 
 	for (const auto& error : errors_) {
@@ -62,7 +62,7 @@ void CMDParser::PrintErrors(std::ostream& os) const {
 	}
 }
 
-void CMDParser::PrintHelp(std::ostream& os) const {
+void Parser::PrintHelp(std::ostream& os) const {
 	os << "Arguments:\n";
 
 	for (const auto& argument : arguments_) {

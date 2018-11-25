@@ -4,8 +4,8 @@ project(cmd-parser)
 # Source files
 set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(SOURCES
-        "${SRC_DIR}/CMDParser.cpp"
-        "${SRC_DIR}/CMDArgument.cpp")
+        "${SRC_DIR}/Parser.cpp"
+        "${SRC_DIR}/Argument.cpp")
 
 # Executable definition and properties
 add_library(${PROJECT_NAME} ${SOURCES})
